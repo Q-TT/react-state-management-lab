@@ -81,28 +81,54 @@ const App = () => {
   const [agility, setAglity] = useState(0);
 
   const handleAddFighter = (newFighter) => {
-    console.log(newFighter)
-    const newTeam = [...team, newFighter]
-    console.log(newTeam)
+    if (money >= newFighter.price) {
+      const newTeam = [...team, newFighter]
+      const newMoney = money - newFighter.price
+      const newStrength = strength + newFighter.strength
+      const newAgility = agility + newFighter.agility
+      
+      setTeam(newTeam)
+      setMoney(newMoney) 
+      setStrength(newStrength)
+      setAglity(newAgility)
+
+    } else {
+      console.log("Not enough money")
+    }
+  }
+
+  const handleRemoveFighter = (currentFighter) => {
+    
+    const newTeam = [...team]
+    newTeam.splice(currentFighter.idx,1)
+    const newMoney = money + currentFighter.price
+    const newStrength = strength - currentFighter.strength
+    const newAgility = agility - currentFighter.agility
+      
     setTeam(newTeam)
+    setMoney(newMoney) 
+    setStrength(newStrength)
+    setAglity(newAgility)
+
   }
 
   return (
     <>
-    <h1>Hello world!</h1>
+    <h1>Zombie Fighters</h1>
     <h3>Money: {money}</h3>
     <h3>Strength: {strength}</h3>
     <h3>Agility: {agility}</h3>
     <h3>Team: </h3>
-    <ul>
+    <ul className="teamInfo">
       {team.length > 0 ? (
         team.map((eachFighter, idx) => (
           <li key={idx}> 
-            <img src= {eachFighter.img}></img>
             <p> {eachFighter.name} </p>
+            <img src= {eachFighter.img}></img>
             <p> Price: {eachFighter.price} </p>
             <p> Strength: {eachFighter.strength} </p>
             <p> Agility: {eachFighter.agility} </p>
+            <button onClick= {()=> handleRemoveFighter(eachFighter)}>Remove</button>
           </li>
         ))
       ) : (
